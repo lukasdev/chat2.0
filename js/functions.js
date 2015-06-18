@@ -53,15 +53,38 @@ jQuery(function(){
 		});
 	}
 
-	/*var aviso = 0;
+	var aviso = 0;
 	jQuery('body').on('mouseover', '.mensagens', function(){
+		var esta = jQuery(this);
 		var altura = jQuery(this).scrollTop();
-		var primeira = jQuery(this).find('li:eq(0)').attr('id');
+		var janela = jQuery(this).parent().parent().attr('id');
+		var idConversa = janela.split('_');
+			idConversa = Number(idConversa[1]);
+
+		var primeira = Number(jQuery(this).find('li:eq(0)').attr('id'));
 		if(altura == 0 && aviso == 0){
-			alert("A altura é zero");
 			aviso = 1;
+			jQuery.ajax({
+				type: 'POST',
+				url: 'sys/loadMore.php',
+				data: {loadMore: 'sim', topid: primeira, conversaid: idConversa, online: userOnline},
+				dataType: 'json',
+				success: function(retorno){
+					jQuery.each(retorno, function(i, msg){
+					if(jQuery('#janela_'+msg.janela_de).length > 0){
+							if(userOnline == msg.id_de){
+								jQuery('#janela_'+msg.janela_de+' .mensagens ul').prepend('<li id="'+msg.id+'" class="eu"><p>'+msg.mensagem+'</p></li>');
+							}else{
+								jQuery('#janela_'+msg.janela_de+' .mensagens ul').prepend('<li id="'+msg.id+'"><div class="imgSmall"><img src="fotos/'+msg.fotoUser+'" /></div><p>'+msg.mensagem+'</p></li>');
+							}
+						}
+					});
+					jQuery('#janela_'+idConversa+' .mensagens').animate({scrollTop: 30}, '500');
+					aviso = 0;
+				}
+			});
 		}
-	});*/
+	});
 
 	jQuery('body').on('click', '#users_online a', function(){
 		var id = jQuery(this).attr('id');
