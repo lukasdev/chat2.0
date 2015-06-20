@@ -1,7 +1,8 @@
 jQuery(function(){
 	var userOnline = Number(jQuery('span.user_online').attr('id'));
 	var clicou = [];
-
+	var teste = 'teste';
+	
 	function in_array(valor, array){
 		for(var i =0; i<array.length;i++){
 			if(array[i] == valor){
